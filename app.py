@@ -294,10 +294,16 @@ def documentation():
 # API ENDPOINTS
 # ===========================
 
+def _ensure_analyzer():
+    global analyzer
+    if analyzer is None:
+        initialize_analyzer()
+
 @app.route('/api/current_regime', methods=['GET'])
 def get_current_regime():
     """Get current market regime"""
     try:
+        _ensure_analyzer()
         if analyzer is None:
             return jsonify({'error': 'Analyzer not initialized'}), 500
         
@@ -329,6 +335,7 @@ def get_current_regime():
 def get_historical_analysis():
     """Get historical regime analysis"""
     try:
+        _ensure_analyzer()
         if analyzer is None:
             return jsonify({'error': 'Analyzer not initialized'}), 500
         
@@ -357,6 +364,7 @@ def get_historical_analysis():
 def get_strategy():
     """Get trading strategy dynamically blended with live signals"""
     try:
+        _ensure_analyzer()
         if analyzer is None:
             return jsonify({'error': 'Analyzer not initialized'}), 500
 
@@ -383,6 +391,7 @@ def get_strategy():
 def get_stats():
     """Get detailed statistics"""
     try:
+        _ensure_analyzer()
         if analyzer is None:
             return jsonify({'error': 'Analyzer not initialized'}), 500
         
@@ -422,6 +431,7 @@ def get_markets():
 def get_ml_metrics():
     """Expose real unsupervised K-Means cluster analytics."""
     try:
+        _ensure_analyzer()
         if analyzer is None:
             return jsonify({'error': 'Analyzer not initialized'}), 500
 
@@ -465,6 +475,7 @@ def get_ml_metrics():
 def get_reports():
     """Return dynamically generated report summaries."""
     try:
+        _ensure_analyzer()
         if analyzer is None:
             return jsonify({'error': 'Analyzer not initialized'}), 500
 
@@ -483,6 +494,7 @@ def get_reports():
 def download_report(report_id):
     """Return a single report in the requested format (json or html)."""
     try:
+        _ensure_analyzer()
         if analyzer is None:
             return jsonify({'error': 'Analyzer not initialized'}), 500
 
@@ -619,8 +631,8 @@ if __name__ == '__main__':
     print("="*60)
     
     app.run(
-        host='0.0.0.0',
-        port=10000,
+        host='localhost',
+        port=5000,
         debug=False,
         use_reloader=False
     )
